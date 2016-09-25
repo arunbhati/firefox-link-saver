@@ -1,0 +1,16 @@
+{
+
+  "description": "add-on to save and search links",
+  "manifest_version": 2,
+  "name": "link-saver",
+  "version": "1.0",
+ 
+  "browser_action": {
+    "browser_style": true,
+    "default_popup": "popup/popup_window.html",
+    "default_icon": {
+      "16": "icons/save-link.png",
+      "32": "icons/save-link.png"
+    }
+  }
+}

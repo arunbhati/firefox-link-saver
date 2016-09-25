@@ -1,0 +1,19 @@
+html, body {
+  width: 100%;
+  overflow:visible;
+  min-width: 500px;
+  padding-top: 3px;
+  padding-right: 3px;
+  padding-bottom: 3px;
+  padding-left: 3px;
+}
+
+.uploadPanel{
+  width: 100%;
+}
+
+#saveLinkButton{
+  margin-top: 4px;
+	width: 80px;
+
+}
