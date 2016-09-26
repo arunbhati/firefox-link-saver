@@ -4,7 +4,18 @@
   "manifest_version": 2,
   "name": "link-saver",
   "version": "1.0",
+
+  "applications": {
+    "gecko": {
+      "id": "quicknot@mozilla.org",
+      "strict_min_version": "45.0"
+    }
+  }, 
  
+  "permissions": [
+    "storage"
+  ], 
+
   "browser_action": {
     "browser_style": true,
     "default_popup": "popup/popup_window.html",

@@ -4,25 +4,47 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="popup_window.css"/>
- 
+    <link rel="stylesheet" href="awesomplete.css"/>
+
   </head>
 
 <body>
 
   <div class="uploadPanel">
-  <tr>
+   <table>
+   <tr>
   <td><b>link:</b> </td>
   <td><input id="linkInfo" type="text" name="link"></td>
-  <tr/>
-  <tr>
   <td><b>tag:</b></td> 
   <td><input id="tagInfo" type="text" name="tag"></td>
-  <tr/>
-  <button type="button" id="saveLinkButton">save link</button>
+  <td><button type="button" id="saveLinkButton">save link</button></td>
+  </tr>
+  </table>
   </div>
+
+  <div class="searchPanel"> 
+  <table>
   <br/> <br/>
+  <tr>
+  <td><b>Search link:</b> </td>
+  <td><input id="search_link_box"></td>
+  <td><button type="button" id="copyLinkButton">copy link</button></td>
+  </tr> 
+  </table>
+  </div>
+ 
+  <br/> <br/>
+  
+
   <div border="px solid black" class="showPanel" id="links-content"></div>
 
+
+ <script src="awesomplete.js" async></script>
  <script src="popup_window.js"></script>
+ <script type="text/javascript">
+ 
+
+ </script>
+ 
 </body>
 </html>
