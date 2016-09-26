@@ -2,18 +2,31 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 	getValuesFromStorageAndUpdateHtml();  
 
-	var input = document.getElementById("search_link_box");
-	new Awesomplete(input, {
-		list: chrome.storage.local.get(null)
+	chrome.storage.local.get(null,function(results) {
+	    if(chrome.runtime.lastError) {
+	    	console.log(chrome.runtime.lastError);
+	    } else {
+
+			var input = document.getElementById("search_link_box");
+	    	var noteKeys = Object.keys(results);
+	    	var listOfObjects = [];
+
+	    	for(i = 0; i < noteKeys.length; i++) {
+				var curKey = noteKeys[i];
+				var curValue = results[curKey];
+				var singleObj = {}
+			    singleObj['label'] = curKey;
+			    singleObj['value'] = curValue;
+			    listOfObjects.push(singleObj);
+			}
+
+			new Awesomplete(input, {
+				list: listOfObjects
+			});
+	    }
 	});
 
-	/*var input = document.getElementById("search_link_box");
-	new Awesomplete(input, {
-		list: localStorage.getItem("linkSaverIdList").split(",")
-	});*/
-
 	console.log("init finished");
-
  });
 
 document.getElementById('saveLinkButton').addEventListener('click', saveLinkInfo);
@@ -33,11 +46,6 @@ function addEventListenerForDeleteButton(){
 			}
 	    }
 	});
-
-
-	/*for (var i = 0; i < localStorage.getItem("linkSaverIdList").split(",").length; i++) {
-		document.getElementById('button_'+ i.toString() ).addEventListener('click', deleteAndUpdateHTML);
-	};*/
 };
 
 function deleteAndUpdateHTML(){
@@ -50,15 +58,6 @@ function deleteAndUpdateHTML(){
 function deleteRecord(deleteKey){
 	console.log("Deleting Record..");
 	chrome.storage.local.remove(deleteKey);
-	/*localStorage.removeItem(deleteKey);
-	var newKeyList =  [];
-    (localStorage.getItem("linkSaverIdList").split(",")).forEach(function(key) {
-		if(key != deleteKey){
-			newKeyList.push(key) ;
-		}
-	});
-	localStorage.setItem("linkSaverIdList",newKeyList.join(","));
-	*/
 }
 
 function saveLinkInfo() {
@@ -77,15 +76,6 @@ function updateStorageWithKeyAndValue(){
 			console.log("value added or updated.");
 		});
 		
-    	/*if(!localStorage.getItem(tag)){
-    	
-	    	var idList = localStorage.getItem("linkSaverIdList");
-	    	idList =  (!isValid(idList)) ? tag : (idList + "," + tag) ;
-			localStorage.setItem("linkSaverIdList", idList);
-		}
-
-    	localStorage.setItem(tag, link);*/
-
   	} else {
   	  console.log("No storage found !!");
     }
@@ -118,46 +108,47 @@ function getValuesFromStorageAndUpdateHtml(){
 		res = res +  '</tbody></table>';
 		document.getElementById("links-content").innerHTML = res;
     }
-
-	/*	var idList = results["linkSaverIdList"];
-
-		document.getElementById("links-content").innerHTML = '<table style="width:100%"><tbody>';
-    	var res =  '<table style="width:100%"><br/><tbody>';
-    	var count = 0;
-    	(idList.split(",")).forEach(function(id) {
-	    	var ln = '<tr><td><a id="link_'+ count +'" target="_blank" href="' + results[id] + '">' + id + '</a></td><td> <button type="button" class="link_delete_button" id="button_'+count+'">delete</button> </td></tr>';
-		  	res = res + ln;
-		  	count += 1;
-		});
-		res = res +  '</tbody></table>';
-		document.getElementById("links-content").innerHTML = res;*/
     
   });
 	
   addEventListenerForDeleteButton();
-
-  
-  /*if (typeof(Storage) !== "undefined" && isValid(localStorage.getItem("linkSaverIdList"))) {
-    var idList = localStorage.getItem("linkSaverIdList");
-
-    document.getElementById("links-content").innerHTML = '<table style="width:100%"><tbody>';
-    var res =  '<table style="width:100%"><br/><tbody>';
-    var count = 0;
-    (idList.split(",")).forEach(function(id) {
-    	var ln = '<tr><td><a id="link_'+ count +'" target="_blank" href="' + localStorage.getItem(id) + '">' + id + '</a></td><td> <button type="button" class="link_delete_button" id="button_'+count+'">delete</button> </td></tr>';
-	  	res = res + ln;
-	  	count += 1;
-	});
-
-	res = res +  '</tbody></table>';
-	document.getElementById("links-content").innerHTML = res;
-	
-  } else {
-  	console.log("No storage found !!");
-  }*/
 	
 };
 
 function isValid(value) {
     return (value != null && value && value.length != 0);
 };
+
+var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
+
+copyTextareaBtn.addEventListener('click', function(event) {
+
+  var input = document.getElementById("search_link_box");
+  input.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copying text command was ' + msg);
+  } catch (err) {
+    console.log('Oops, unable to copy');
+  }
+});
+
+
+var openLink = document.querySelector('.js-openlink');
+openLink.addEventListener('click', function(event) {
+
+	var input = document.getElementById("search_link_box");
+
+	var win = window.open(input.value, '_blank');
+
+	if (win) {
+	    //Browser has allowed it to be opened
+	    win.focus();
+	} else {
+	    //Browser has blocked it
+	    alert('Please allow popups for this website');
+	}
+});
+
